@@ -8,6 +8,9 @@ RUN chmod +x /opt/jboss/infinispan-server/bin/*.sh
 RUN /opt/jboss/infinispan-server/bin/add-user.sh -u ispnadmin -p ispnadmin -r ManagementRealm -e -s
 RUN sed -i 's/security-domain="other" auth-method="BASIC"//' /opt/jboss/infinispan-server/standalone/configuration/clustered.xml
 
+#Update writable attributes
+RUN chmod -R 777 /opt/jboss
+
 CMD /opt/jboss/infinispan-server/bin/standalone.sh -c clustered.xml \
 	-b `ip a s | sed -ne '/127.0.0.1/!{s/^[ \t]*inet[ \t]*\([0-9.]\+\)\/.*$/\1/p}'` \
 	-bmanagement `ip a s | sed -ne '/127.0.0.1/!{s/^[ \t]*inet[ \t]*\([0-9.]\+\)\/.*$/\1/p}'`
